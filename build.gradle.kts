@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    // Dependências adicionais aqui, se necessário
+    implementation("com.fazecast:jSerialComm:[2.0.0,3.0.0)")
 }
 
 javafx {
