@@ -5,7 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import serial.SerialCommunication;
 
+import javax.swing.*;
 
 public class MainApp extends Application {
 
@@ -22,6 +24,16 @@ public class MainApp extends Application {
     }
 
     public static void main(String[] args) {
+        SerialCommunication serialCommunication = new SerialCommunication("COM4");
+        try {
+            serialCommunication.start();
+            while(true) {
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         launch(args);
     }
 
