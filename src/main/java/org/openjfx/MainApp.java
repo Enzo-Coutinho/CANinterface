@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import serial.SerialCommunication;
 
 import javax.swing.*;
+import java.sql.SQLOutput;
 
 public class MainApp extends Application {
 
@@ -24,14 +25,15 @@ public class MainApp extends Application {
     }
 
     public static void main(String[] args) {
-        SerialCommunication serialCommunication = new SerialCommunication("COM4");
+        SerialCommunication serialCommunication = new SerialCommunication("COM3");
         try {
             serialCommunication.start();
             while(true) {
-
+                System.out.println(serialCommunication.receiveMessage());
             }
         } catch (Exception e) {
             e.printStackTrace();
+            serialCommunication.close();
         }
 
         launch(args);

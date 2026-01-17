@@ -1,8 +1,8 @@
 package serial;
 import com.fazecast.jSerialComm.*;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 public class SerialCommunication {
 
@@ -11,7 +11,10 @@ public class SerialCommunication {
     final int STOP_BITS = SerialPort.ONE_STOP_BIT;
     final int PARITY = SerialPort.NO_PARITY;
 
-    final int CAN_BUFFER_BYTES_LENGHT = 1024;
+    final int TIMEOUT_TO_READ_MESSAGE_SECONDS = 1000;
+    final int TIMEOUT_TO_WRITE_MESSAGE_SECONDS  = 0;
+
+    final int CAN_BUFFER_BYTES_LENGHT = 4;
 
     final SerialPort serialPort;
 
@@ -22,16 +25,18 @@ public class SerialCommunication {
 
     public void start() {
         serialPort.openPort();
-        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 1000, 0);
+        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING,
+                                        TIMEOUT_TO_READ_MESSAGE_SECONDS,
+                                        TIMEOUT_TO_WRITE_MESSAGE_SECONDS);
     }
 
     public void close() {
         serialPort.closePort();
     }
 
-    public int receiveMessage() {
+    public int receiveMessage() throws UnsupportedEncodingException {
         byte[] readBuffer = new byte[CAN_BUFFER_BYTES_LENGHT];
         serialPort.readBytes(readBuffer, readBuffer.length);
-        return ByteBuffer.wrap(readBuffer).order(ByteOrder.LITTLE_ENDIAN).getInt();
+        return Integer.parseInt(new String(readBuffer, StandardCharsets.UTF_8));
     }
 }
