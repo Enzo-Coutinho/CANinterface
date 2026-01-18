@@ -26,7 +26,7 @@ enum DeviceTypes {
     private final int identification;
     private final String name;
 
-    private static Map<Integer, DeviceTypes> mapOfDevices = new HashMap<>();
+    private static final Map<Integer, DeviceTypes> mapOfDevices = new HashMap<>();
 
     DeviceTypes(int identification, String name) {
         this.identification = identification;

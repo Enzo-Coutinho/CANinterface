@@ -1,5 +1,8 @@
 package CANBus;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum Manufacturer {
     BROADCAST(0, "Broadcast"),
     NI(1,"National Instrument"),
@@ -24,13 +27,24 @@ public enum Manufacturer {
     BRUSHLAND_LABS(20, "Brushland Labs"),
     RESERVED(21, "Reserved");
 
+    static final int BIT_MASK = 0xFF;
+
     final int identification;
     final String name;
+
+    private static final Map<Integer, Manufacturer> mapManufacturer = new HashMap<>();
 
     Manufacturer(int identification, String name) {
         this.identification = identification;
         this.name = name;
     }
 
+    static {
+        for(Manufacturer manufacturer : Manufacturer.values())
+            mapManufacturer.put(manufacturer.identification, manufacturer);
+    }
 
+    public static Manufacturer getFromIdentification(int identification) {
+        return mapManufacturer.get(identification);
+    }
 }
