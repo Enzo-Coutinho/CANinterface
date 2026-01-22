@@ -25,7 +25,7 @@ public class MainApp extends Application {
     }
 
     public static void main(String[] args) {
-        SerialCommunication serialCommunication = new SerialCommunication("COM3");
+        SerialCommunication serialCommunication = new SerialCommunication("COM6");
         try {
             serialCommunication.start();
             while(true) {

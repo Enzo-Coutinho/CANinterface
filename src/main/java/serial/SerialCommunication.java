@@ -14,7 +14,7 @@ public class SerialCommunication {
     final int TIMEOUT_TO_READ_MESSAGE_SECONDS = 1000;
     final int TIMEOUT_TO_WRITE_MESSAGE_SECONDS  = 0;
 
-    final int CAN_BUFFER_BYTES_LENGHT = 4;
+    final int CAN_BUFFER_BYTES_LENGHT = 12;
 
     final SerialPort serialPort;
 
