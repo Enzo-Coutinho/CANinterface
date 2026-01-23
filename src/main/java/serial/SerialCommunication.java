@@ -11,7 +11,7 @@ public class SerialCommunication {
     final int STOP_BITS = SerialPort.ONE_STOP_BIT;
     final int PARITY = SerialPort.NO_PARITY;
 
-    final int TIMEOUT_TO_READ_MESSAGE_SECONDS = 1000;
+    final int TIMEOUT_TO_READ_MESSAGE_SECONDS = 0;
     final int TIMEOUT_TO_WRITE_MESSAGE_SECONDS  = 0;
 
     final int CAN_BUFFER_BYTES_LENGHT = 12;
@@ -34,9 +34,9 @@ public class SerialCommunication {
         serialPort.closePort();
     }
 
-    public int receiveMessage() throws UnsupportedEncodingException {
+    public byte[] receiveMessage() {
         byte[] readBuffer = new byte[CAN_BUFFER_BYTES_LENGHT];
-        serialPort.readBytes(readBuffer, readBuffer.length);
-        return Integer.parseInt(new String(readBuffer, StandardCharsets.UTF_8));
+        int bytesRead = serialPort.readBytes(readBuffer, readBuffer.length);
+        return readBuffer;
     }
 }

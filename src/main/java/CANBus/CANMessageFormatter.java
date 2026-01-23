@@ -9,7 +9,7 @@ public class CANMessageFormatter {
     final int deviceNumber;
     final int data = 0;
 
-    public CANMessageFormatter(final int message) {
+    public CANMessageFormatter(final byte[] byteMessage) {
         devicesTypes = decodeDevicesTypes(message);
         manufacturer = decodeManufacturer(message);
         apiClass = decodeAPIClass(message);

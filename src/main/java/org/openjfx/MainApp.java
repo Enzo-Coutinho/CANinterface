@@ -1,5 +1,6 @@
 package org.openjfx;
 
+import CANBus.CANMessageFormatter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,7 +30,8 @@ public class MainApp extends Application {
         try {
             serialCommunication.start();
             while(true) {
-                System.out.println(serialCommunication.receiveMessage());
+                byte[] canMessage = serialCommunication.receiveMessage();
+                CANMessageFormatter canMessageFormatter = new CANMessageFormatter(canMessage);
             }
         } catch (Exception e) {
             e.printStackTrace();
