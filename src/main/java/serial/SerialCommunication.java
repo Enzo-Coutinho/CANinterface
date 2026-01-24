@@ -1,7 +1,5 @@
 package serial;
 import com.fazecast.jSerialComm.*;
-
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 public class SerialCommunication {
@@ -11,10 +9,14 @@ public class SerialCommunication {
     final int STOP_BITS = SerialPort.ONE_STOP_BIT;
     final int PARITY = SerialPort.NO_PARITY;
 
-    final int TIMEOUT_TO_READ_MESSAGE_SECONDS = 0;
+    final int TIMEOUT_TO_READ_MESSAGE_SECONDS = 1000;
     final int TIMEOUT_TO_WRITE_MESSAGE_SECONDS  = 0;
 
-    final int CAN_BUFFER_BYTES_LENGHT = 12;
+    final int CAN_BUFFER_BINARY_BYTES_LENGHT = 14;
+    final int CAN_BUFFER_BINARY_BYTES_START_PROTOCOL = 1;
+
+    final int CAN_BUFFER_TEXT_BYTES_LENGHT = CAN_BUFFER_BINARY_BYTES_LENGHT * 2;
+    final int CAN_BUFFER_TEXT_BYTES_START_PROTOCOL = CAN_BUFFER_BINARY_BYTES_START_PROTOCOL * 2;
 
     final SerialPort serialPort;
 
@@ -35,8 +37,22 @@ public class SerialCommunication {
     }
 
     public byte[] receiveMessage() {
-        byte[] readBuffer = new byte[CAN_BUFFER_BYTES_LENGHT];
-        int bytesRead = serialPort.readBytes(readBuffer, readBuffer.length);
-        return readBuffer;
+        byte[] readStartProtocolBuffer = new byte[CAN_BUFFER_TEXT_BYTES_START_PROTOCOL];
+        byte[] buffer = new byte[CAN_BUFFER_TEXT_BYTES_LENGHT];
+
+        while(!getHexStringFromBytes(readStartProtocolBuffer).equals("0A")) {
+            serialPort.readBytes(readStartProtocolBuffer, readStartProtocolBuffer.length);
+        }
+        serialPort.readBytes(buffer, buffer.length);
+
+        byte[] canFrame = new byte[CAN_BUFFER_TEXT_BYTES_LENGHT - 2];
+
+        System.arraycopy(buffer, 0, canFrame, 0, CAN_BUFFER_TEXT_BYTES_LENGHT - 2);
+
+        return canFrame;
+    }
+
+    public String getHexStringFromBytes(byte[] bytes) {
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 }
