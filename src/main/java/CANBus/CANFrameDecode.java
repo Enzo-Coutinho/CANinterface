@@ -1,11 +1,11 @@
 package CANBus;
 
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
-public class CANMessageFormatter {
+public class CANFrameDecode {
 
     final String canFrame;
+
     final int header;
     final int flags;
     final long data;
@@ -16,18 +16,18 @@ public class CANMessageFormatter {
     final int apiIndex;
     final int deviceNumber;
 
-    public CANMessageFormatter(final byte[] rawCANFrame) {
+    public CANFrameDecode(final byte[] rawCANFrame) {
         this.canFrame = new String(rawCANFrame, StandardCharsets.UTF_8);
+
         this.header = getHeaderFromCANFrame(canFrame);
         this.flags = getFlagsFromCANFrame(canFrame);
         this.data = getDataFromCANFrame(canFrame);
 
         devicesTypes = decodeDevicesTypes(header);
         manufacturer = decodeManufacturer(header);
-
-        apiClass = 0;
-        apiIndex = 0;
-        deviceNumber = 0;
+        apiClass = decodeAPIClass(header);
+        apiIndex = decodeAPIIndex(header);
+        deviceNumber = decodeDeviceNumber(header);
     }
 
     public long getData() {
@@ -42,12 +42,44 @@ public class CANMessageFormatter {
         return header;
     }
 
-    private DeviceTypes decodeDevicesTypes(final int message) {
-        return DeviceTypes.getFromIdentification((message >> 24) & DeviceTypes.BIT_MASK);
+    public int getDeviceNumber() {
+        return deviceNumber;
     }
 
-    private Manufacturer decodeManufacturer(final int message) {
-        return Manufacturer.getFromIdentification((message >> 16) & Manufacturer.BIT_MASK);
+    public int getApiIndex() {
+        return apiIndex;
+    }
+
+    public int getApiClass() {
+        return apiClass;
+    }
+
+    public String getManufacturerName() {
+        return manufacturer.getName();
+    }
+
+    public String getDeviceName() {
+        return devicesTypes.getName();
+    }
+
+    private DeviceTypes decodeDevicesTypes(final int header) {
+        return DeviceTypes.getFromIdentification((header >> 24) & DeviceTypes.BIT_MASK);
+    }
+
+    private Manufacturer decodeManufacturer(final int header) {
+        return Manufacturer.getFromIdentification((header >> 16) & Manufacturer.BIT_MASK);
+    }
+
+    private int decodeAPIClass(final int header) {
+        return (header >> 10) & 0x3F;
+    }
+
+    private int decodeAPIIndex(final int header) {
+        return (header >> 6) & 0xF;
+    }
+
+    private int decodeDeviceNumber(final int header) {
+        return header & 0x3F;
     }
 
     private long getDataFromCANFrame(final String canFrame) {
