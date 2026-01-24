@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import serial.SerialCommunication;
 
 import javax.swing.*;
-import java.sql.SQLOutput;
 
 public class MainApp extends Application {
 
@@ -32,13 +31,17 @@ public class MainApp extends Application {
             while(true) {
                 byte[] canMessage = serialCommunication.receiveMessage();
                 CANMessageFormatter canMessageFormatter = new CANMessageFormatter(canMessage);
+                System.out.println("Full CAN Frame: " + canMessageFormatter.getFullCANFrame());
+                System.out.println("Header CAN: " + Integer.toUnsignedString(canMessageFormatter.getHeader(), 16));
+                System.out.println("Flags: " + Integer.toUnsignedString(canMessageFormatter.getFlags(), 16));
+                System.out.println("Data: " +  Long.toUnsignedString(canMessageFormatter.getData(), 16));
             }
         } catch (Exception e) {
             e.printStackTrace();
             serialCommunication.close();
         }
 
-        launch(args);
+        //launch(args);
     }
 
 }
