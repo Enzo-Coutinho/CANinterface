@@ -4,6 +4,8 @@ import java.nio.charset.StandardCharsets;
 
 public class CANFrameDecode {
 
+    final short HEX = 16;
+
     final String canFrame;
 
     final int header;
@@ -83,15 +85,15 @@ public class CANFrameDecode {
     }
 
     private long getDataFromCANFrame(final String canFrame) {
-        return  Long.parseUnsignedLong(canFrame.substring(10, 26), 16);
+        return  Long.parseUnsignedLong(canFrame.substring(10, 26), HEX);
     }
 
     private int getFlagsFromCANFrame(final String canFrame) {
-        return Integer.parseUnsignedInt(canFrame.substring(8, 10), 16);
+        return Integer.parseUnsignedInt(canFrame.substring(8, 10), HEX);
     }
 
     private int getHeaderFromCANFrame(final String canFrame) {
-        return Integer.parseUnsignedInt(canFrame.substring(0, 8), 16);
+        return Integer.parseUnsignedInt(canFrame.substring(0, 8), HEX);
     }
 
     public String getFullCANFrame() {
