@@ -23,7 +23,7 @@ public class MainApp extends Application {
     }
 
     public static void main(String[] args) {
-        SerialCommunication serialCommunication = new SerialCommunication("COM6");
+        SerialCommunication serialCommunication = new SerialCommunication("COM3");
         try {
             serialCommunication.start();
             while(true) {
@@ -39,6 +39,9 @@ public class MainApp extends Application {
                 System.out.println("API Class: " + Integer.toUnsignedString(canFrameDecode.getApiClass(), 16));
                 System.out.println("Index Class: " + Integer.toUnsignedString(canFrameDecode.getApiIndex(), 16));
                 System.out.println("Device number: " + Integer.toUnsignedString(canFrameDecode.getDeviceNumber(), 16));
+                if(canFrameDecode.isRoboRioHeartbeat()) {
+                    System.out.println("RoboRIO Heartbeat");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

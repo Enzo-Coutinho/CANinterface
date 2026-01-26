@@ -39,23 +39,50 @@ public class CANFrameDecode {
     }
 
     public short getMatchTimeSeconds() {
-        return (short)((data >> 56) & 0xFF);
+        return (short) ((data >> 56) & 0xFF);
     }
 
     public short getMatchNumber() {
-        return (short)((data >> 48) & 0x3FF);
+        return (short) ((data >> 46) & 0x3FF);
     }
 
     public short getReplayNumber() {
-        return (short)((data >> 42) & 0x40);
+        return (short) ((data >> 40) & 0x3F);
     }
 
     public boolean isRedAlliance() {
-        return ((data >> 5) & 0x01) == 1;
+        return ((data >> 39) & 0x1L) == 1L;
     }
 
     public boolean isRobotEnabled() {
-        return
+        return ((data >> 38) & 0x1L) == 1L;
+    }
+
+    public boolean isAutonomousMode() {
+        return ((data >> 37) & 0x1L) == 1L;
+    }
+
+    public boolean isTestMode() {
+        return ((data >> 36) & 0x1L) == 1L;
+    }
+
+    public boolean isSystemWatchdogSet() {
+        return ((data >> 35) & 0x1L) == 1L;
+    }
+
+    public int getTournamentType() {
+        return (int) ((data >> 32) & 0x7L);
+    }
+
+    public int getTimeOfDayYear()  { return (int) ((data >> 26) & 0x3FL); }
+    public int getTimeOfDayMonth() { return (int) ((data >> 22) & 0x0FL); }
+    public int getTimeOfDayDay()   { return (int) ((data >> 17) & 0x1FL); }
+    public int getTimeOfDaySec()   { return (int) ((data >> 11) & 0x3FL); }
+    public int getTimeOfDayMin()   { return (int) ((data >>  5) & 0x3FL); }
+    public int getTimeOfDayHour()  { return (int) ((data >>  0) & 0x1FL); }
+
+    public boolean isRoboRioHeartbeat() {
+        return isRoboRioHeartbeat;
     }
 
     public long getData() {
