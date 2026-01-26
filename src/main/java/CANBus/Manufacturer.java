@@ -27,10 +27,10 @@ public enum Manufacturer {
     BRUSHLAND_LABS(20, "Brushland Labs"),
     RESERVED(21, "Reserved");
 
-    static final int BIT_MASK = 0xFF;
+    public static final int BIT_MASK = 0xFF;
 
-    final int identification;
-    final String name;
+    private final int identification;
+    private final String name;
 
     private static final Map<Integer, Manufacturer> mapManufacturer = new HashMap<>();
 
@@ -42,6 +42,10 @@ public enum Manufacturer {
     static {
         for(Manufacturer manufacturer : Manufacturer.values())
             mapManufacturer.put(manufacturer.identification, manufacturer);
+    }
+
+    public String getName() {
+        return name;
     }
 
     public static Manufacturer getFromIdentification(int identification) {
