@@ -6,6 +6,8 @@ public class CANFrameDecode {
 
     final short HEX = 16;
 
+    final int ROBORIO_HEARTBEAT = 0x01011840;
+
     final String canFrame;
 
     final int header;
@@ -17,6 +19,8 @@ public class CANFrameDecode {
     final int apiClass;
     final int apiIndex;
     final int deviceNumber;
+
+    final boolean isRoboRioHeartbeat;
 
     public CANFrameDecode(final byte[] rawCANFrame) {
         this.canFrame = new String(rawCANFrame, StandardCharsets.UTF_8);
@@ -30,6 +34,28 @@ public class CANFrameDecode {
         apiClass = decodeAPIClass(header);
         apiIndex = decodeAPIIndex(header);
         deviceNumber = decodeDeviceNumber(header);
+
+        isRoboRioHeartbeat = header == ROBORIO_HEARTBEAT;
+    }
+
+    public short getMatchTimeSeconds() {
+        return (short)((data >> 56) & 0xFF);
+    }
+
+    public short getMatchNumber() {
+        return (short)((data >> 48) & 0x3FF);
+    }
+
+    public short getReplayNumber() {
+        return (short)((data >> 42) & 0x40);
+    }
+
+    public boolean isRedAlliance() {
+        return ((data >> 5) & 0x01) == 1;
+    }
+
+    public boolean isRobotEnabled() {
+        return
     }
 
     public long getData() {
